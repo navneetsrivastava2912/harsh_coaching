@@ -55,11 +55,39 @@ body{
     url('harsh.jpg');
   background-size:cover;background-position:center center;filter:saturate(1.02);z-index:0;
 }
-.hero-overlay{
-  position:relative;z-index:2;max-width:920px;text-align:center;padding:36px;border-radius:18px;background:rgba(255,255,255,0.95);box-shadow:var(--shadow)
+.hero-overlay {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  color: #000;
+  text-align: center; /* centers text and button */
 }
-.hero-overlay h1{font-size:2rem;margin-bottom:8px;color:#052033}
-.hero-overlay p{color:var(--muted);margin-bottom:16px}
+
+.hero-overlay h1,
+.hero-overlay p {
+  margin-bottom: 1rem;
+}
+
+.hero-overlay a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.hero-overlay a:hover {
+  background-color: #0056b3;
+}
+
+
 
 /* main sections */
 .section{padding:60px 20px;text-align:center;max-width:var(--maxw);margin:0 auto}
