@@ -1,15 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harsh Coaching Centre | Excellence in Home Tuition</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Harsh Coaching Centre | Attendance & Tests</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer type="module" src="script.js"></script>
 </head>
 <body>
-
-  <!-- ===== NAVBAR ===== -->
   <header class="navbar">
     <div class="logo">Harsh Coaching Centre</div>
     <nav class="nav-links">
@@ -18,64 +16,144 @@
       <a href="#courses">Courses</a>
       <a href="#contact">Contact</a>
     </nav>
-    <div class="menu-toggle">&#9776;</div>
+
+    <div class="nav-actions">
+      <button id="teacherBtn" class="btn-ghost">Teacher</button>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
   </header>
 
-  <!-- ===== HERO SECTION ===== -->
-  <section class="hero" id="home">
-    <div class="hero-overlay">
-      <h1>Unlock Brilliance with Personalized Learning</h1>
-      <p>India’s leading home tuition institute — helping students achieve excellence through individual attention and expert guidance.</p>
-      <a href="#contact" class="btn">Book a Free Demo</a>
-    </div>
-  </section>
-
-  <!-- ===== ABOUT ===== -->
-  <section class="section about" id="about">
-    <h2>About Us</h2>
-    <p>
-      At <strong>Harsh Coaching Centre</strong>, we bring quality education to your doorstep. 
-      Our expert tutors focus on understanding each student’s strengths and weaknesses 
-      to deliver a customized learning experience that guarantees results.
-    </p>
-  </section>
-
-  <!-- ===== COURSES ===== -->
-  <section class="section courses" id="courses">
-    <h2>Our Courses</h2>
-    <div class="course-grid">
-      <div class="course-card">
-        <h3>Mathematics</h3>
-        <p>Develop logical thinking, analytical skills, and confidence in problem-solving with expert-led guidance.</p>
+  <main>
+    <section class="hero" id="home" aria-label="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay">
+        <h1>Unlock Brilliance with Personalized Learning</h1>
+        <p>Individual attention, expert guidance — home tuition that delivers results.</p>
+        <a class="btn" href="#contact">Book a Free Demo</a>
       </div>
-      <div class="course-card">
-        <h3>Science</h3>
-        <p>Make learning interactive with clear concepts in Physics, Chemistry, and Biology.</p>
-      </div>
-      <div class="course-card">
-        <h3>English</h3>
-        <p>Master grammar, vocabulary, and fluency to succeed academically and professionally.</p>
-      </div>
-      <div class="course-card">
-        <h3>Exam Preparation</h3>
-        <p>Targeted strategies and mock tests for CBSE, ICSE, and State Boards.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== CONTACT ===== -->
-  <section class="section contact" id="contact">
-    <h2>Contact Us</h2>
-    <p>📍 Allahdadhpur Gorakhpur Near Bhagirathi Medical Store</p>
-    <p>📞 <a href="tel:+91 6306868739 ">+91 6306868739</a></p>
-    <p>📧 <a href="mailto:navneetsrivastav660@gmail.com</a></p>
-    <a href="#home" class="btn">Back to Top</a>
-  </section>
+    <section class="section about" id="about">
+      <h2>About Us</h2>
+      <p>
+        At <strong>Harsh Coaching Centre</strong>, we bring quality education to your doorstep.
+        Expert tutors, small batches, focused learning.
+      </p>
+    </section>
 
-  <!-- ===== FOOTER ===== -->
+    <section class="section courses" id="courses">
+      <h2>Our Courses</h2>
+      <div class="course-grid">
+        <article class="course-card"><h3>Mathematics</h3><p>Logic and problem solving.</p></article>
+        <article class="course-card"><h3>Science</h3><p>Clear concepts in Physics, Chemistry & Biology.</p></article>
+        <article class="course-card"><h3>English</h3><p>Grammar, vocabulary & fluency.</p></article>
+        <article class="course-card"><h3>Exam Prep</h3><p>Mock tests and strategy.</p></article>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <h2>Contact Us</h2>
+      <p>📍 Allahdadhpur, Gorakhpur — Near Bhagirathi Medical Store</p>
+      <p>📞 <a href="tel:+916306868739">+91 6306868739</a></p>
+      <p>📧 <a href="mailto:navneetsrivastav660@gmail.com">navneetsrivastav660@gmail.com</a></p>
+      <a class="btn" href="#home">Back to Top</a>
+    </section>
+  </main>
+
   <footer>
     <p>© 2025 Harsh Coaching Centre — Empowering Students with Excellence</p>
   </footer>
+
+  <!-- TEACHER MODAL -->
+  <div id="teacherModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="dashboardTitle">
+    <div class="modal-card">
+      <button id="closeModal" class="modal-close" aria-label="close">✕</button>
+
+      <!-- AUTH -->
+      <section id="authSection">
+        <h3 id="authTitle">Teacher Login</h3>
+        <div class="form-row">
+          <input id="email" type="email" placeholder="Email" autocomplete="username" />
+          <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+        </div>
+        <div class="form-row smallrow">
+          <label class="checkbox"><input id="toggleRegister" type="checkbox"> Register new teacher</label>
+        </div>
+        <p id="authError" class="muted error"></p>
+        <div class="auth-actions">
+          <button id="authBtn" class="btn">Continue</button>
+          <button id="logoutBtn" class="btn btn-ghost hidden">Logout</button>
+        </div>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="hidden">
+        <header class="dash-header">
+          <h3 id="dashboardTitle">Teacher Dashboard</h3>
+          <div class="dash-controls">
+            <button id="openAttendance" class="btn small active">Attendance</button>
+            <button id="openTests" class="btn small ghost">Tests</button>
+            <button id="openRanking" class="btn small ghost">Ranking</button>
+            <button id="signOut" class="btn btn-ghost">Sign out</button>
+          </div>
+        </header>
+
+        <main class="dash-main">
+          <!-- Attendance -->
+          <section id="attendancePanel" class="panel">
+            <div class="panel-head">
+              <div>
+                <h4>Attendance</h4>
+                <p class="muted">Select date & mark Present (P) or Absent (A) for each student.</p>
+              </div>
+              <div class="panel-actions">
+                <input id="attendanceDate" type="date" />
+                <button id="loadAttendance" class="btn small ghost">Load</button>
+              </div>
+            </div>
+
+            <div id="studentsList" class="students-grid"></div>
+
+            <div class="panel-footer">
+              <button id="submitAttendance" class="btn">Submit Attendance</button>
+              <button id="clearSelections" class="btn small ghost">Clear</button>
+              <div id="attendanceMsg" class="muted"></div>
+            </div>
+          </section>
+
+          <!-- Tests -->
+          <section id="testsPanel" class="panel hidden">
+            <h4>Record Test</h4>
+            <form id="testForm" class="form-grid">
+              <select id="testStudent" required></select>
+              <input id="testSubject" type="text" placeholder="Subject" required />
+              <input id="testTotal" type="number" placeholder="Total Marks" min="1" required />
+              <input id="testObtained" type="number" placeholder="Obtained Marks" min="0" required />
+              <input id="testDate" type="date" required />
+              <button type="submit" class="btn">Save Test</button>
+            </form>
+            <div class="panel-sub">
+              <button id="exportTestsCSV" class="btn small ghost">Export Tests CSV</button>
+              <div id="testSavedMsg" class="muted"></div>
+            </div>
+          </section>
+
+          <!-- Ranking -->
+          <section id="rankingPanel" class="panel hidden">
+            <h4>Ranking</h4>
+            <table class="ranking-table">
+              <thead><tr><th>Rank</th><th>Student</th><th>Present</th><th>Total</th><th>Attendance %</th><th>Avg Test %</th></tr></thead>
+              <tbody id="rankingBody"></tbody>
+            </table>
+            <div class="panel-sub">
+              <button id="exportAttendanceCSV" class="btn small">Export Attendance</button>
+            </div>
+          </section>
+
+        </main>
+      </section>
+    </div>
+  </div>
 
 </body>
 </html>
