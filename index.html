@@ -8,9 +8,11 @@
   <script defer type="module" src="script.js"></script>
 </head>
 <body>
-  <header class="navbar">
+  <header class="navbar" role="banner">
     <div class="logo">Harsh Coaching Centre</div>
-    <nav class="nav-links">
+
+    <!-- Desktop nav links -->
+    <nav class="nav-links" aria-label="primary">
       <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#courses">Courses</a>
@@ -18,10 +20,56 @@
     </nav>
 
     <div class="nav-actions">
-      <button id="teacherBtn" class="btn-ghost">Teacher</button>
-      <button class="menu-toggle" id="menuToggle">☰</button>
+      <!-- On desktop we still show teacher button to open the side teacher panel -->
+      <button id="teacherBtn" class="btn-ghost" aria-expanded="false" aria-controls="mobileMenu">Teacher</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">☰</button>
     </div>
   </header>
+
+  <!-- MOBILE / SLIDE MENU (also used on desktop small widths) -->
+  <aside id="mobileMenu" class="mobile-menu hidden" role="dialog" aria-modal="false" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <button id="mobileClose" class="mobile-close" aria-label="Close menu">✕</button>
+
+      <nav class="mobile-nav">
+        <a href="#home" class="mobile-link">Home</a>
+        <a href="#about" class="mobile-link">About</a>
+        <a href="#courses" class="mobile-link">Courses</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+      </nav>
+
+      <hr/>
+
+      <!-- TEACHER AREA INSIDE HAMBURGER -->
+      <section id="teacherArea" class="teacher-area">
+        <!-- Auth Section (shown when logged out) -->
+        <div id="authSectionMobile" class="auth-section">
+          <h3 id="authTitle">Teacher Login</h3>
+          <div class="form-row">
+            <input id="mobileEmail" type="email" placeholder="Email" autocomplete="username" />
+            <input id="mobilePassword" type="password" placeholder="Password" autocomplete="current-password" />
+          </div>
+          <div class="form-row smallrow">
+            <label class="checkbox"><input id="mobileToggleRegister" type="checkbox"> Register new teacher</label>
+          </div>
+          <p id="authErrorMobile" class="muted error"></p>
+          <div class="auth-actions">
+            <button id="authBtnMobile" class="btn">Continue</button>
+            <button id="logoutBtnMobile" class="btn btn-ghost hidden">Logout</button>
+          </div>
+        </div>
+
+        <!-- Teacher links (shown when logged in) -->
+        <div id="teacherLinks" class="teacher-links hidden" aria-hidden="true">
+          <h4>Teacher Tools</h4>
+          <button id="openAttendanceMobile" class="btn small full">Open Attendance</button>
+          <button id="openTestsMobile" class="btn small full ghost">Open Tests</button>
+          <button id="openRankingMobile" class="btn small full ghost">Open Ranking</button>
+          <button id="signOutMobile" class="btn btn-ghost full">Sign out</button>
+        </div>
+      </section>
+    </div>
+  </aside>
 
   <main>
     <section class="hero" id="home" aria-label="hero">
@@ -56,38 +104,12 @@
       <p>📍 Allahdadhpur, Gorakhpur — Near Bhagirathi Medical Store</p>
       <p>📞 <a href="tel:+916306868739">+91 6306868739</a></p>
       <p>📧 <a href="mailto:navneetsrivastav660@gmail.com">navneetsrivastav660@gmail.com</a></p>
-      <a class="btn" href="#home">Back to Top</a>
+      
     </section>
-  </main>
 
-  <footer>
-    <p>© 2025 Harsh Coaching Centre — Empowering Students with Excellence</p>
-  </footer>
-
-  <!-- TEACHER MODAL -->
-  <div id="teacherModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="dashboardTitle">
-    <div class="modal-card">
-      <button id="closeModal" class="modal-close" aria-label="close">✕</button>
-
-      <!-- AUTH -->
-      <section id="authSection">
-        <h3 id="authTitle">Teacher Login</h3>
-        <div class="form-row">
-          <input id="email" type="email" placeholder="Email" autocomplete="username" />
-          <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
-        </div>
-        <div class="form-row smallrow">
-          <label class="checkbox"><input id="toggleRegister" type="checkbox"> Register new teacher</label>
-        </div>
-        <p id="authError" class="muted error"></p>
-        <div class="auth-actions">
-          <button id="authBtn" class="btn">Continue</button>
-          <button id="logoutBtn" class="btn btn-ghost hidden">Logout</button>
-        </div>
-      </section>
-
-      <!-- DASHBOARD -->
-      <section id="dashboard" class="hidden">
+    <!-- ======= TEACHER DASHBOARD (moved from modal) ======= -->
+    <section id="teacherDashboard" class="teacher-dashboard hidden" aria-hidden="true">
+      <div class="modal-card embedded">
         <header class="dash-header">
           <h3 id="dashboardTitle">Teacher Dashboard</h3>
           <div class="dash-controls">
@@ -99,7 +121,7 @@
         </header>
 
         <main class="dash-main">
-          <!-- Attendance -->
+          <!-- Attendance panel -->
           <section id="attendancePanel" class="panel">
             <div class="panel-head">
               <div>
@@ -121,7 +143,7 @@
             </div>
           </section>
 
-          <!-- Tests -->
+          <!-- Tests panel -->
           <section id="testsPanel" class="panel hidden">
             <h4>Record Test</h4>
             <form id="testForm" class="form-grid">
@@ -138,7 +160,7 @@
             </div>
           </section>
 
-          <!-- Ranking -->
+          <!-- Ranking panel -->
           <section id="rankingPanel" class="panel hidden">
             <h4>Ranking</h4>
             <table class="ranking-table">
@@ -149,11 +171,15 @@
               <button id="exportAttendanceCSV" class="btn small">Export Attendance</button>
             </div>
           </section>
-
         </main>
-      </section>
-    </div>
-  </div>
+      </div>
+    </section>
+    <!-- ======= end teacher dashboard ======= -->
 
+  </main>
+
+  <footer>
+    <p>© 2025 Harsh Coaching Centre — Empowering Students with Excellence</p>
+  </footer>
 </body>
 </html>

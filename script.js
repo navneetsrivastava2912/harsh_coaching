@@ -45,18 +45,31 @@ const STUDENTS = [
   { id: 'krishna_maurya', name: 'Krishna Maurya' }
 ];
 
-/* ---------- UI element refs ---------- */
+/* ---------- UI refs (updated) ---------- */
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
 const teacherBtn = document.getElementById('teacherBtn');
-const teacherModal = document.getElementById('teacherModal');
-const closeModal = document.getElementById('closeModal');
-const authBtn = document.getElementById('authBtn');
-const logoutBtn = document.getElementById('logoutBtn');
-const toggleRegister = document.getElementById('toggleRegister');
-const authError = document.getElementById('authError');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
 
-const dashboard = document.getElementById('dashboard');
+const authBtnMobile = document.getElementById('authBtnMobile');
+const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+const mobileToggleRegister = document.getElementById('mobileToggleRegister');
+const authErrorMobile = document.getElementById('authErrorMobile');
+const mobileEmail = document.getElementById('mobileEmail');
+const mobilePassword = document.getElementById('mobilePassword');
+
+const teacherLinks = document.getElementById('teacherLinks');
+const authSectionMobile = document.getElementById('authSectionMobile');
+
+const openAttendanceMobile = document.getElementById('openAttendanceMobile');
+const openTestsMobile = document.getElementById('openTestsMobile');
+const openRankingMobile = document.getElementById('openRankingMobile');
+const signOutMobile = document.getElementById('signOutMobile');
+
+const teacherDashboard = document.getElementById('teacherDashboard');
+
+/* Dashboard (existing ids mostly same) */
+const dashboard = document.getElementById('teacherDashboard');
 const openAttendance = document.getElementById('openAttendance');
 const openTests = document.getElementById('openTests');
 const openRanking = document.getElementById('openRanking');
@@ -84,9 +97,35 @@ const rankingBody = document.getElementById('rankingBody');
 const exportTestsCSV = document.getElementById('exportTestsCSV');
 const exportAttendanceCSV = document.getElementById('exportAttendanceCSV');
 
-const menuToggle = document.getElementById('menuToggle');
-const navLinks = document.querySelector('.nav-links');
-if(menuToggle) menuToggle.addEventListener('click', ()=> navLinks.classList.toggle('active'));
+/* ---------- Mobile menu toggles ---------- */
+function openMobileMenu(){
+  mobileMenu.classList.remove('hidden');
+  mobileMenu.setAttribute('aria-hidden', 'false');
+  menuToggle.setAttribute('aria-expanded','true');
+}
+function closeMobileMenu(){
+  mobileMenu.classList.add('hidden');
+  mobileMenu.setAttribute('aria-hidden', 'true');
+  menuToggle.setAttribute('aria-expanded','false');
+}
+
+menuToggle?.addEventListener('click', ()=> {
+  if(mobileMenu.classList.contains('hidden')) openMobileMenu();
+  else closeMobileMenu();
+});
+mobileClose?.addEventListener('click', ()=> closeMobileMenu());
+teacherBtn?.addEventListener('click', ()=> {
+  // open mobile menu and focus teacher area
+  if(mobileMenu.classList.contains('hidden')) openMobileMenu();
+  // ensure scroll to teacher area
+  setTimeout(()=> {
+    const ta = document.getElementById('teacherArea');
+    if(ta) ta.scrollIntoView({behavior:'smooth'});
+  },100);
+});
+document.querySelectorAll('.mobile-link').forEach(a=>{
+  a.addEventListener('click', ()=> closeMobileMenu());
+});
 
 /* ---------- Utilities ---------- */
 const todayYMD = () => {
@@ -179,9 +218,7 @@ clearSelectionsBtn.addEventListener('click', async ()=>{
   await renderStudentsForDate(attendanceDate.value);
 });
 
-/* Submit attendance — confirm first, then write all selected (and default others to 'Not recorded' or keep existing?) 
-   We'll write present/absent for every student based on selection; if a student is not selected, we keep DB as-is (no overwrite).
-*/
+/* Submit attendance */
 submitAttendanceBtn.addEventListener('click', async ()=>{
   const date = attendanceDate.value;
   if(!date) { showMsg(attendanceMsg,'Pick a date'); return; }
@@ -359,58 +396,87 @@ function downloadCSV(rows, filename='export.csv'){
   URL.revokeObjectURL(url);
 }
 
-/* ---------- AUTH handlers ---------- */
-authBtn.addEventListener('click', async ()=>{
-  authError.textContent = '';
-  const email = (emailInput.value || '').trim();
-  const password = (passwordInput.value || '').trim();
-  if(!email || !password){ authError.textContent = 'Provide valid email & password'; return; }
+/* ---------- AUTH handlers (mobile + general) ---------- */
+async function handleAuth(email, password, register=false, displayErrEl=null){
   try {
-    if(toggleRegister.checked){
+    if(register){
       await createUserWithEmailAndPassword(auth, email, password);
-      showMsg(authError, 'Teacher registered. Logging in...');
+      if(displayErrEl) showMsg(displayErrEl, 'Teacher registered. Logging in...', 2500);
     } else {
       await signInWithEmailAndPassword(auth, email, password);
     }
   } catch(err){
     console.error(err);
-    authError.textContent = err?.message || 'Authentication failed';
+    if(displayErrEl) displayErrEl.textContent = err?.message || 'Authentication failed';
   }
+}
+
+/* mobile auth button */
+authBtnMobile?.addEventListener('click', async ()=>{
+  authErrorMobile.textContent = '';
+  const email = (mobileEmail.value || '').trim();
+  const password = (mobilePassword.value || '').trim();
+  if(!email || !password){ authErrorMobile.textContent = 'Provide valid email & password'; return; }
+  await handleAuth(email, password, mobileToggleRegister.checked, authErrorMobile);
 });
 
-document.getElementById('signOut')?.addEventListener('click', async ()=>{
+/* mobile signout */
+signOutMobile?.addEventListener('click', async ()=> {
   await signOut(auth);
-  teacherModal.classList.add('hidden');
+  closeMobileMenu();
 });
-logoutBtn?.addEventListener('click', async ()=> {
+logoutBtnMobile?.addEventListener('click', async ()=> {
   await signOut(auth);
-  teacherModal.classList.add('hidden');
+  closeMobileMenu();
+});
+
+/* Desktop signout button in dashboard */
+document.getElementById('signOut')?.addEventListener('click', async ()=> {
+  await signOut(auth);
 });
 
 /* auth state change */
 onAuthStateChanged(auth, async (user)=>{
   if(user){
-    document.getElementById('authSection').style.display = 'none';
-    dashboard.classList.remove('hidden');
-    logoutBtn.classList.remove('hidden');
+    // hide auth form inside mobile menu, show teacher links
+    if(authSectionMobile) authSectionMobile.classList.add('hidden');
+    if(teacherLinks) teacherLinks.classList.remove('hidden');
+    if(logoutBtnMobile) logoutBtnMobile.classList.remove('hidden');
+
+    // show dashboard section in page (embedded)
+    if(teacherDashboard) {
+      teacherDashboard.classList.remove('hidden');
+      teacherDashboard.setAttribute('aria-hidden','false');
+      // show attendance tab by default
+      attendancePanel.classList.remove('hidden');
+      testsPanel.classList.add('hidden');
+      rankingPanel.classList.add('hidden');
+      openAttendance.classList.add('active');
+      openTests.classList.remove('active');
+      openRanking.classList.remove('active');
+    }
+
     // Ensure students and populate UI
     await ensureStudentsExist();
     populateTestStudentOptions();
     await renderStudentsForDate(attendanceDate.value || todayYMD());
     await showRanking();
-    // default open attendance
-    attendancePanel.classList.remove('hidden');
-    testsPanel.classList.add('hidden');
-    rankingPanel.classList.add('hidden');
   } else {
-    document.getElementById('authSection').style.display = 'block';
-    dashboard.classList.add('hidden');
-    logoutBtn.classList.add('hidden');
+    // show auth form inside mobile menu
+    if(authSectionMobile) authSectionMobile.classList.remove('hidden');
+    if(teacherLinks) teacherLinks.classList.add('hidden');
+    if(logoutBtnMobile) logoutBtnMobile.classList.add('hidden');
+
+    // hide embedded dashboard
+    if(teacherDashboard) {
+      teacherDashboard.classList.add('hidden');
+      teacherDashboard.setAttribute('aria-hidden','true');
+    }
   }
 });
 
 /* Dashboard tab switching */
-openAttendance.addEventListener('click', ()=> {
+openAttendance?.addEventListener('click', ()=> {
   attendancePanel.classList.remove('hidden');
   testsPanel.classList.add('hidden');
   rankingPanel.classList.add('hidden');
@@ -418,7 +484,7 @@ openAttendance.addEventListener('click', ()=> {
   openTests.classList.remove('active');
   openRanking.classList.remove('active');
 });
-openTests.addEventListener('click', ()=> {
+openTests?.addEventListener('click', ()=> {
   attendancePanel.classList.add('hidden');
   testsPanel.classList.remove('hidden');
   rankingPanel.classList.add('hidden');
@@ -426,7 +492,7 @@ openTests.addEventListener('click', ()=> {
   openTests.classList.add('active');
   openRanking.classList.remove('active');
 });
-openRanking.addEventListener('click', async ()=> {
+openRanking?.addEventListener('click', async ()=> {
   attendancePanel.classList.add('hidden');
   testsPanel.classList.add('hidden');
   rankingPanel.classList.remove('hidden');
@@ -436,9 +502,23 @@ openRanking.addEventListener('click', async ()=> {
   await showRanking();
 });
 
-/* Modal open/close */
-teacherBtn.addEventListener('click', ()=> teacherModal.classList.remove('hidden'));
-closeModal.addEventListener('click', ()=> teacherModal.classList.add('hidden'));
+/* Mobile teacher links open dashboard (and close menu) */
+openAttendanceMobile?.addEventListener('click', ()=> {
+  closeMobileMenu();
+  openAttendance.click();
+  // reveal dashboard
+  teacherDashboard.classList.remove('hidden');
+});
+openTestsMobile?.addEventListener('click', ()=> {
+  closeMobileMenu();
+  openTests.click();
+  teacherDashboard.classList.remove('hidden');
+});
+openRankingMobile?.addEventListener('click', async ()=> {
+  closeMobileMenu();
+  openRanking.click();
+  teacherDashboard.classList.remove('hidden');
+});
 
 /* On initial load: populate tests select and default UI settings */
 document.addEventListener('DOMContentLoaded', async ()=>{

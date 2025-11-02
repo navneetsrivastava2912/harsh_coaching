@@ -30,7 +30,7 @@ body{
 /* NAV */
 .navbar{
   position:fixed;top:0;left:0;right:0;height:70px;display:flex;align-items:center;justify-content:space-between;
-  padding:10px 20px;background:linear-gradient(90deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
+  padding:10px 20px;background:linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
   backdrop-filter: blur(6px);z-index:999;box-shadow:0 6px 20px rgba(8,16,30,0.05);
 }
 .logo{font-weight:700;color:var(--accent1);font-size:1.1rem}
@@ -56,7 +56,7 @@ body{
   background-size:cover;background-position:center center;filter:saturate(1.02);z-index:0;
 }
 .hero-overlay{
-  position:relative;z-index:2;max-width:920px;text-align:center;padding:36px;border-radius:18px;background:rgba(255,255,255,0.85);box-shadow:var(--shadow)
+  position:relative;z-index:2;max-width:920px;text-align:center;padding:36px;border-radius:18px;background:rgba(255,255,255,0.95);box-shadow:var(--shadow)
 }
 .hero-overlay h1{font-size:2rem;margin-bottom:8px;color:#052033}
 .hero-overlay p{color:var(--muted);margin-bottom:16px}
@@ -75,18 +75,25 @@ body{
 /* footer */
 footer{padding:20px;text-align:center;color:#fff;background:linear-gradient(90deg,var(--accent1),var(--accent2));margin-top:26px}
 
-/* modal / dashboard */
-.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(3,6,12,0.45);z-index:2000;padding:18px}
-.hidden{display:none}
-.modal-card{width:min(var(--maxw),98%);background:linear-gradient(180deg,#fff,#fbfdff);padding:16px;border-radius:12px;box-shadow:0 30px 80px rgba(6,12,24,0.4);position:relative}
-.modal-close{position:absolute;right:12px;top:12px;background:#fff;border:0;padding:6px 10px;border-radius:8px;cursor:pointer}
+/* mobile menu / teacher area */
+.mobile-menu{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:flex-end;background:rgba(3,6,12,0.2);z-index:2000;padding:18px;transition:opacity .18s}
+.mobile-menu.hidden{display:none}
+.mobile-menu-inner{width:340px;max-width:92%;height:100%;background:linear-gradient(180deg,#fff,#fbfdff);border-radius:12px;box-shadow:0 30px 80px rgba(6,12,24,0.4);padding:16px;overflow:auto;position:relative}
+.mobile-close{position:absolute;right:12px;top:12px;background:#fff;border:0;padding:6px 10px;border-radius:8px;cursor:pointer}
+.mobile-nav{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.mobile-nav a{display:block;padding:10px;border-radius:8px;text-decoration:none;color:var(--accent1);font-weight:600}
+.mobile-link{display:block;padding:8px 0}
 
-/* auth */
-.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-.form-row input{padding:10px;border-radius:10px;border:1px solid #e8eef6;min-width:200px}
-.smallrow{align-items:center}
-.checkbox input{margin-right:8px}
-.auth-actions{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+/* teacher area inside hamburger */
+.teacher-area h3{margin-bottom:8px;color:var(--accent1)}
+.auth-section .form-row{display:flex;gap:8px;flex-wrap:wrap}
+.auth-section input{padding:8px;border-radius:8px;border:1px solid #e8eef6;min-width:120px}
+.teacher-links{display:flex;flex-direction:column;gap:8px}
+.btn.full{width:100%}
+
+/* modal-like embedded dashboard */
+.teacher-dashboard{max-width:var(--maxw);margin:20px auto;padding:0 20px}
+.modal-card.embedded{background:linear-gradient(180deg,#fff,#fbfdff);padding:12px;border-radius:10px;box-shadow:var(--shadow)}
 
 /* dashboard header */
 .dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -136,4 +143,9 @@ footer{padding:20px;text-align:center;color:#fff;background:linear-gradient(90de
   .form-row input{min-width:140px}
   .students-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
   .modal-card{padding:12px}
+  /* teacher dashboard becomes full width on small screens */
+  .teacher-dashboard{padding:12px}
 }
+
+/* ensure teacher-dashboard hidden by default */
+.hidden{display:none}
