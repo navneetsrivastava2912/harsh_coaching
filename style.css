@@ -177,3 +177,17 @@ footer{padding:20px;text-align:center;color:#fff;background:linear-gradient(90de
 
 /* ensure teacher-dashboard hidden by default */
 .hidden{display:none}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between image and text */
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logo-img {
+  width: 93px;  /* adjust size as needed */
+  height: 93px;
+  object-fit: cover;
+}
